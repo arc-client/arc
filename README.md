@@ -112,13 +112,10 @@ This project is licensed under the **GNU General Public License v3.0** – see t
 
 ## 👥 Credits
 
-- **Constructor (Avanatiker)** – Lead Developer
-- **Blade** – Developer
-- **beanbag44** – Developer  
-- **Emy** – Developer
+- **Navidu (consensus1)** – Developer
 
 ---
 
 <p align="center">
-  Made with ❤️ by the Arc Team
+  Made with ❤️ by Navidu
 </p>
