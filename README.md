@@ -17,42 +17,58 @@
 
 ---
 
-## ✨ Features
+## Features
 
-### ⚔️ Combat
-- **KillAura** – Automatically attacks nearby entities
-- **CrystalAura** – End crystal automation
-- **AimAssist** – Smooth rotation towards targets
-- **TriggerBot** – Auto-attack when looking at entities
-- **Criticals** – Forces critical hits
-- **AutoTotem** – Automatic totem management
+<details>
+<summary><b>Combat</b></summary>
 
-### 🏃 Movement
-- **Speed** – Enhanced movement speed
-- **ElytraFly** – Elytra flight enhancements
-- **NoFall** – Prevents fall damage
-- **Jesus** – Walk on water
-- **Sprint** – Auto-sprint
-- **Velocity** – Anti-knockback
+- KillAura – Automatically attacks nearby entities
+- CrystalAura – End crystal automation
+- AimAssist – Smooth rotation towards targets
+- TriggerBot – Auto-attack when looking at entities
+- Criticals – Forces critical hits
+- AutoTotem – Automatic totem management
 
-### 🎨 Render
-- **ESP** – Entity and block highlighting
-- **Fullbright** – See in the dark
-- **XRay** – See through blocks
-- **Zoom** – Optical zoom
-- **NoRender** – Remove visual clutter
-- **Particles** – Custom particle effects
+</details>
 
-### 👤 Player
-- **FastBreak** – Faster block breaking
-- **FastPlace** – Faster block placing
-- **Nuker** – Mass block destruction
-- **Freecam** – Detached camera view
-- **AntiAFK** – Prevent AFK kicks
+<details>
+<summary><b>Movement</b></summary>
+
+- Speed – Enhanced movement speed
+- ElytraFly – Elytra flight enhancements
+- NoFall – Prevents fall damage
+- Jesus – Walk on water
+- Sprint – Auto-sprint
+- Velocity – Anti-knockback
+
+</details>
+
+<details>
+<summary><b>Render</b></summary>
+
+- ESP – Entity and block highlighting
+- Fullbright – See in the dark
+- XRay – See through blocks
+- Zoom – Optical zoom
+- NoRender – Remove visual clutter
+- Particles – Custom particle effects
+
+</details>
+
+<details>
+<summary><b>Player</b></summary>
+
+- FastBreak – Faster block breaking
+- FastPlace – Faster block placing
+- Nuker – Mass block destruction
+- Freecam – Detached camera view
+- AntiAFK – Prevent AFK kicks
+
+</details>
 
 ---
 
-## 📦 Installation
+## Installation
 
 ### Requirements
 - Minecraft **1.21.5**
@@ -68,7 +84,7 @@
 
 ---
 
-## 🔧 Building from Source
+## Building from Source
 
 ```bash
 # Clone the repository
@@ -83,7 +99,7 @@ cd arc
 
 ---
 
-## 🎮 Usage
+## Usage
 
 - Press **Right Shift** to open the ClickGUI
 - Use the GUI to enable/disable modules
@@ -92,7 +108,7 @@ cd arc
 
 ---
 
-## 🤝 Contributing
+## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
@@ -104,18 +120,18 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ---
 
-## 📜 License
+## License
 
 This project is licensed under the **GNU General Public License v3.0** – see the [LICENSE](LICENSE) file for details.
 
 ---
 
-## 👥 Credits
+## Credits
 
 - **Navidu (consensus1)** – Developer
 
 ---
 
 <p align="center">
-  Made with ❤️ by Navidu
+  Made with care by Navidu
 </p>
