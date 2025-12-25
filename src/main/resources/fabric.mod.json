@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "id": "$modId",
+  "version": "$modVersion",
+  "name": "$modName",
+  "description": "$modDescription",
+  "authors": [
+    "$modAuthors"
+  ],
+  "contact": {
+    "homepage": "https://github.com/arc-client/arc",
+    "sources": "https://github.com/arc-client/arc"
+  },
+  "license": "GNU General Public License v3.0",
+  "icon": "$modIcon",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      {
+        "adapter": "kotlin",
+        "value": "com.arc.Arc"
+      }
+    ]
+  },
+  "mixins": [
+    "${modId}.mixins.common.json"
+  ],
+  "accessWidener": "${modId}.accesswidener",
+  "depends": {
+    "fabricloader": ">=$fabricLoaderVersion",
+    "minecraft": "~$minecraftVersion",
+    "fabric-api": ">=$fabricApiVersion+$minecraftVersion",
+    "fabric-language-kotlin": ">=$kotlinFabricVersion",
+    "java": ">=$javaVersion",
+    "baritone": "*"
+  }
+}

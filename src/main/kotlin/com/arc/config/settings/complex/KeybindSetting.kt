@@ -1,0 +1,185 @@
+
+package com.arc.config.settings.complex
+
+import com.google.gson.reflect.TypeToken
+import com.arc.brigadier.CommandResult.Companion.failure
+import com.arc.brigadier.CommandResult.Companion.success
+import com.arc.brigadier.argument.boolean
+import com.arc.brigadier.argument.value
+import com.arc.brigadier.argument.word
+import com.arc.brigadier.executeWithResult
+import com.arc.brigadier.optional
+import com.arc.brigadier.required
+import com.arc.config.Setting
+import com.arc.config.SettingCore
+import com.arc.gui.dsl.ImGuiBuilder
+import com.arc.util.InputUtils
+import com.arc.util.KeyCode
+import com.arc.util.Mouse
+import com.arc.util.StringUtils.capitalize
+import com.arc.util.extension.CommandBuilder
+import imgui.ImGui.isMouseClicked
+import imgui.flag.ImGuiCol
+import imgui.flag.ImGuiHoveredFlags
+import imgui.flag.ImGuiMouseButton
+import net.minecraft.command.CommandRegistryAccess
+import org.lwjgl.glfw.GLFW.GLFW_KEY_LEFT_SHIFT
+import org.lwjgl.glfw.GLFW.GLFW_KEY_RIGHT_SUPER
+import org.lwjgl.glfw.GLFW.GLFW_MOD_ALT
+import org.lwjgl.glfw.GLFW.GLFW_MOD_CAPS_LOCK
+import org.lwjgl.glfw.GLFW.GLFW_MOD_CONTROL
+import org.lwjgl.glfw.GLFW.GLFW_MOD_NUM_LOCK
+import org.lwjgl.glfw.GLFW.GLFW_MOD_SHIFT
+import org.lwjgl.glfw.GLFW.GLFW_MOD_SUPER
+
+class KeybindSettingCore(defaultValue: Bind) : SettingCore<Bind>(
+	defaultValue,
+	TypeToken.get(Bind::class.java).type
+) {
+    constructor(defaultValue: KeyCode) : this(Bind(defaultValue.code, 0, -1))
+
+    private var listening = false
+
+	context(setting: Setting<*, Bind>)
+    override fun ImGuiBuilder.buildLayout() {
+        text(setting.name)
+        sameLine()
+
+        val bind = value
+        val preview =
+            if (listening) "Press any key…"
+            else bind.name
+
+        if (listening) {
+            withStyleColor(ImGuiCol.Button, 0.20f, 0.50f, 1.00f, 1.00f) {
+                withStyleColor(ImGuiCol.ButtonHovered, 0.25f, 0.60f, 1.00f, 1.00f) {
+                    withStyleColor(ImGuiCol.ButtonActive, 0.20f, 0.50f, 0.95f, 1.00f) {
+                        button(preview)
+                    }
+                }
+            }
+        } else {
+            button(preview) { listening = true }
+        }
+
+        arcTooltip {
+            if (!listening) setting.description.ifBlank { "Click to set. Esc cancels. Backspace/Delete unbinds." }
+            else "Listening… Press a key to bind. Esc to cancel. Backspace/Delete to unbind."
+        }
+
+        if (listening && !isAnyItemHovered && isMouseClicked(ImGuiMouseButton.Left)) {
+            listening = false
+        }
+
+        sameLine()
+        smallButton("Unbind") {
+            value = Bind.EMPTY
+            listening = false
+        }
+        onItemHover(ImGuiHoveredFlags.Stationary) {
+            arcTooltip("Clear binding")
+        }
+
+        if (listening) {
+            InputUtils.newMouseEvent()
+                ?.let {
+                    value = Bind(0, it.modifiers, it.button)
+                    listening = false
+                    return
+                }
+
+            InputUtils.newKeyboardEvent()
+                ?.let {
+                    val isModKey = it.keyCode in GLFW_KEY_LEFT_SHIFT..GLFW_KEY_RIGHT_SUPER
+
+                    // If a mod key is pressed first ignore it unless it was released without any other keys
+                    if ((it.isPressed && !isModKey) || (it.isReleased && isModKey)) {
+                        when (it.translated) {
+                            KeyCode.Escape -> {}
+                            KeyCode.Backspace, KeyCode.Delete -> value = Bind.EMPTY
+                            else -> value = Bind(it.translated.code, it.modifiers, -1)
+                        }
+
+                        listening = false
+                    }
+
+                    return
+                }
+        }
+    }
+
+	context(setting: Setting<*, Bind>)
+    override fun CommandBuilder.buildCommand(registry: CommandRegistryAccess) {
+        required(word(setting.name)) { name ->
+            suggests { _, builder ->
+                KeyCode.entries.forEach { builder.suggest(it.name.capitalize()) }
+                (1..10).forEach { builder.suggest(it) }
+                builder.buildFuture()
+            }
+            optional(boolean("mouse button")) { isMouseButton ->
+                executeWithResult {
+                    val isMouse = if (isMouseButton != null) isMouseButton().value() else false
+                    var bind = Bind.EMPTY
+                    if (isMouse) {
+                        val num = try {
+                            name().value().toInt()
+                        } catch(_: NumberFormatException) {
+                            return@executeWithResult failure("${name().value()} doesn't match with a mouse button")
+                        }
+                        bind = Bind(0, 0, mouse = num)
+                    } else {
+                        bind = try {
+                            Bind(KeyCode.valueOf(name().value()).code, 0)
+                        } catch(_: IllegalArgumentException) {
+                            return@executeWithResult failure("${name().value()} doesn't match with a bind")
+                        }
+                    }
+
+                    setting.trySetValue(bind)
+                    return@executeWithResult success()
+                }
+            }
+        }
+    }
+}
+
+data class Bind(
+    val key: Int,
+    val modifiers: Int,
+    val mouse: Int = -1,
+) {
+    val truemods = buildList {
+        if (modifiers and GLFW_MOD_SHIFT != 0) add(KeyCode.LeftShift)
+        if (modifiers and GLFW_MOD_CONTROL != 0) add(KeyCode.LeftControl)
+        if (modifiers and GLFW_MOD_ALT != 0) add(KeyCode.LeftAlt)
+        if (modifiers and GLFW_MOD_SUPER != 0) add(KeyCode.LeftSuper)
+        if (modifiers and GLFW_MOD_CAPS_LOCK != 0) add(KeyCode.CapsLock)
+        if (modifiers and GLFW_MOD_NUM_LOCK != 0) add(KeyCode.NumLock)
+    }
+
+    val isMouseBind: Boolean
+        get() = mouse >= 0
+
+    val isKeyBind: Boolean
+        get() = key > 0
+
+    val name: String
+        get() {
+            if (mouse < 0 && modifiers <= 0 && key <= 0) return "Unbound"
+
+            val list = mutableListOf<Any>()
+
+            if (mouse >= 0) list.add(Mouse.entries[mouse])
+            if (modifiers > 0) list.add(truemods.joinToString(separator = "+") { it.name })
+            if (key > 0) list.add(KeyCode.fromKeyCode(key))
+
+            return list.joinToString(separator = "+") { it.toString() }
+        }
+
+    override fun toString() =
+        "Key Code: $key, Modifiers: ${truemods.joinToString(separator = "+") { it.name }}, Mouse Button: ${Mouse.entries.getOrNull(mouse) ?: "None"}"
+
+    companion object {
+        val EMPTY = Bind(0, 0, -1)
+    }
+}

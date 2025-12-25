@@ -1,0 +1,21 @@
+name: Feature
+description: Request or implement a feature.
+title: "Feat: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Before submitting your feature, please check to see if it has already been requested.
+  - type: textarea
+    id: feature-idea
+    attributes:
+      label: Feature
+      value: "I would like to implement a feature that..."
+    validations:
+      required: true
+  - type: checkboxes
+    id: pr
+    attributes:
+      label: Pull Request
+      options:
+        - label: I will be submitting a pull request

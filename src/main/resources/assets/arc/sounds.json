@@ -1,0 +1,37 @@
+{
+  "button_click": {
+    "sounds": [
+      "arc:ui/button_click"
+    ]
+  },
+  "bool_on": {
+    "sounds": [
+      "arc:ui/bool_on"
+    ]
+  },
+  "bool_off": {
+    "sounds": [
+      "arc:ui/bool_off"
+    ]
+  },
+  "module_on": {
+    "sounds": [
+      "arc:ui/module_on"
+    ]
+  },
+  "module_off": {
+    "sounds": [
+      "arc:ui/module_off"
+    ]
+  },
+  "settings_open": {
+    "sounds": [
+      "arc:ui/settings_open"
+    ]
+  },
+  "settings_close": {
+    "sounds": [
+      "arc:ui/settings_close"
+    ]
+  }
+}

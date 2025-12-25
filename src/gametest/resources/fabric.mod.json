@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "id": "arc-tests",
+  "version": "1.0.0",
+  "name": "Arc Fabric gametest entrypoint",
+  "environment": "*",
+  "entrypoints": {
+    "fabric-client-gametest": [
+      {
+        "adapter": "kotlin",
+        "value": "com.arc.ArcTest"
+      }
+    ]
+  }
+}

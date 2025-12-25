@@ -1,0 +1,32 @@
+name: Pull Request Labeler
+
+on:
+  issues:
+    types: [opened]
+    branches:
+      - '1.21.5'
+  pull_request:
+    types: [opened]
+    branches:
+      - '1.21.5'
+
+permissions:
+  issues: write
+  contents: read
+  pull-requests: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check Out Repository
+        uses: actions/checkout@v4
+
+      - name: Labeler
+        uses: srvaroa/labeler@v1.11.0
+        with:
+          config_path: .github/workflows/labeler/labeler-config.yml
+          use_local_config: false
+          fail_on_error: true
+        env:
+          GITHUB_TOKEN: "${{ github.token }}"
