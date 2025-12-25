@@ -101,7 +101,7 @@ cd arc
 
 ## Usage
 
-- Press **Right Shift** to open the ClickGUI
+- Press **Y** to open the ClickGUI
 - Use the GUI to enable/disable modules
 - Right-click modules to access settings
 - Modules are organized by category: Combat, Movement, Render, Player, etc.
